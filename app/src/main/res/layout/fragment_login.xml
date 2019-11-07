@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.compte.LoginFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/champLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Entrez votre login"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/champPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Entrez votre mot de passe"
+            android:inputType="textPersonName" />
+
+        <CheckBox
+            android:id="@+id/checkbox_connected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Restez connecté" />
+
+        <Button
+            android:id="@+id/btnConnexion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Connexion" />
+    </LinearLayout>
+</FrameLayout>
