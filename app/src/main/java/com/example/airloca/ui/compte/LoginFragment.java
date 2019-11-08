@@ -13,13 +13,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.airloca.R;
+import com.example.airloca.ServiceWebAsync;
+
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements ServiceWebAsync.OnFragmentInteractionListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -79,6 +82,12 @@ public class LoginFragment extends Fragment {
 
                 if(!login.isEmpty() && !password.isEmpty()){
                     String url = "http://172.16.64.12/airloca/loginpersonne.php";
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("login", login);
+                    params.put("password", password);
+
+                    ServiceWebAsync serviceWebAsync = new ServiceWebAsync(url, params, getContext(), LoginFragment.this);
+                    serviceWebAsync.execute();
                 } else
                 {
                     Toast.makeText(getContext(), "Veuillez saisir vos informations", Toast.LENGTH_LONG).show();
@@ -90,4 +99,9 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+
+    @Override
+    public void returnSw(String value) {
+        Toast.makeText(getContext(), "Value=" + value, Toast.LENGTH_LONG).show();
+    }
 }
