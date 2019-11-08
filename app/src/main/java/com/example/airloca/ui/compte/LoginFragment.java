@@ -1,19 +1,29 @@
 package com.example.airloca.ui.compte;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.arch.core.util.Function;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.airloca.Entities.Personne;
 import com.example.airloca.R;
 import com.example.airloca.ServiceWebAsync;
+import com.example.airloca.Utils.Functions;
+import com.example.airloca.ui.Session;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 
@@ -32,6 +42,9 @@ public class LoginFragment extends Fragment implements ServiceWebAsync.OnFragmen
     private String mParam1;
     private String mParam2;
 
+    EditText txtLogin;
+    EditText txtPassword;
+    CheckBox checkBox;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -68,8 +81,9 @@ public class LoginFragment extends Fragment implements ServiceWebAsync.OnFragmen
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        final EditText txtLogin = view.findViewById(R.id.champLogin);
-        final EditText txtPassword = view.findViewById(R.id.champPassword);
+        txtLogin = view.findViewById(R.id.champLogin);
+        txtPassword = view.findViewById(R.id.champPassword);
+        checkBox = view.findViewById(R.id.checkbox_connected);
 
         Button btnConnexion = view.findViewById(R.id.btnConnexion);
 
@@ -100,8 +114,42 @@ public class LoginFragment extends Fragment implements ServiceWebAsync.OnFragmen
     }
 
 
+    //Récupère les informations post
     @Override
     public void returnSw(String value) {
         Toast.makeText(getContext(), "Value=" + value, Toast.LENGTH_LONG).show();
+
+        Gson gson = new Gson();
+        Personne personne = null;
+
+        try {
+             personne = gson.fromJson(value, Personne.class);
+        }
+        catch (Exception ex)
+        {
+
+        }
+
+        if(personne != null && !personne.getNom().isEmpty())
+        {
+            Session.setPersonneConnected(personne);
+
+
+            if(checkBox.isChecked())
+            {
+                Functions.SaveSharedPreferences(getActivity(),"PermanentPersonne", value);
+            }
+
+            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+            navController.navigate(R.id.nav_compte_personne);
+
+        }else
+        {
+            Toast.makeText(getContext(), "Désolé mais les gens comme toi ne peuvent pas accéder à cette application.", Toast.LENGTH_LONG).show();
+            txtLogin.setText("");
+            txtPassword.setText("");
+        }
+
+
     }
 }
